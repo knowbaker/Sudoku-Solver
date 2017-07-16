@@ -1,4 +1,4 @@
-/*References
+/* References
  * https://stackoverflow.com/questions/19697033/styling-a-sudoku-grid/19699482#19699482
  * https://jsfiddle.net/MrPolywhirl/Lrgw7eLL/
 */
@@ -34,7 +34,7 @@ function generateSudokuGrid3() {
 	for(var i = 0; i < 9; i++) {
 		$("table").append("<tr id='r" + i + "'>");
 		for(var j = 0; j < 9; j++)
-			$("#r"+i).append("<td id='c" + i + j + "'><input type='text'></input></td>");
+			$("#r"+i).append("<td id='c" + i + j + "'><input type='text' maxlength='1'></input></td>");
 		
 	}
 	
