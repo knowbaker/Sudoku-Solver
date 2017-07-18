@@ -7,48 +7,55 @@ const D = R*R;
 const S = Math.sqrt(R);
 
 $(function() {
-	$("#s1").on("click", function() {
-		var board = getCellVals();
-//		for(var i = 0; i < board.length; i++)
-//			console.log(board[i]);
-		setTimeout(function() {
-			console.log(".");
-		}, 3000);
-		solve(board);
+	$("#solve").on("click", function(e) {
+		e.preventDefault();
+		var game = getGame();
+//		if(isValid(game.grid))
+			solve(game.grid);
+	});
+	
+	$("#clear").on("click", function(e) {
+		e.preventDefault();
+		clearGrid();
 	});
 });
 
-function getCellVals() {
-	var cellVals = [];
+function getGame() {
+	var game = {};
+	var grid = [];
 	for(var i = 0; i < R; i++)
 		for(var j = 0; j < R; j++) {
 			var x = $("#d" + i + j).val();
-			if(x == "")
+			if(x.trim() === "")
 				x = 0;
-			cellVals[R*i + j] = parseInt(x);
+			grid[R*i + j] = parseInt(x);
 		}
-	return cellVals;
+	game.grid = grid;
+	game.solved = false;
+	return game;
 }
 
-function solve(board) {
-	dfs(board, 0);
+function solve(grid) {
+	dfs(grid, 0);
 }
 
-function dfs(board, d) {//d = depth on tree
+function dfs(grid, d) {//d = depth on tree
 	if(d === D) {
-		print(board); return;
+		console.log("Solved...");
+		printToScreen(grid);
+		return;
 	}
 	
-	if(board[d] !== 0) {
-		dfs(board, d+1); return;
+	if(grid[d] !== 0) {
+		dfs(grid, d+1); return;
 	}
 	
 	for(var i = 1; i <= R; i++) {
-		board[d] = i;
-		if(!canBacktrack(board, d))
-			dfs(board, d+1);
+		grid[d] = i;
+		if(!canBacktrack(grid, d))
+			dfs(grid, d+1);
 	}
-	board[d] = 0;//cleanup
+	grid[d] = 0;//cleanup
 }
 
 function canBacktrack(a, k) {
@@ -83,24 +90,33 @@ function canBacktrack(a, k) {
 	return false;
 }
 
-function print(board) {
+function print(grid) {
 	for(var i = 0; i < R; i++) {
 		var line = "";
 		for(var j = 0; j < R; j++) {
-			line += board[R*i + j] + " ";
+			line += grid[R*i + j] + " ";
 		}
 		console.log(line);
 	}
 }
 
-/*
- * 7 2 8 9 4 6 3 1 5 
-   9 3 4 2 5 1 6 7 8 
-   5 1 6 7 3 8 2 4 9 
-   1 4 7 5 9 3 8 2 6 
-   3 6 9 4 8 2 1 5 7 
-   8 5 2 1 6 7 4 9 3 
-   2 9 3 6 1 5 7 8 4 
-   4 8 1 3 7 9 5 6 2 
-   6 7 5 8 2 4 9 3 1 
-*/
+function printToScreen(grid) {
+	for(var i = 0; i < R; i++) {
+		for(var j = 0; j < R; j++) {
+			$("#d" + i + j).val(grid[R*i + j]);
+		}
+	}
+}
+
+function clearGrid() {
+	for(var i = 0; i < R; i++) {
+		for(var j = 0; j < R; j++) {
+			$("#d" + i + j).val("");
+		}
+	}
+}
+
+//function isValid(grid) {
+//	for(let i = 0; i < R; i++)
+//		
+//}
