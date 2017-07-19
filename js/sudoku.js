@@ -5,18 +5,34 @@
 const R = 9;//4;
 const D = R*R;
 const S = Math.sqrt(R);
-
+const PCT = 0.01;
+var SOLVED = false;
+var numRegex = "/\d{1}/";
+var PROGRESS = function() {//TODO: Might be useless due to high CPU utilization by dfs
+	var arr = [];
+	for(let i = 0; i <= D; i++)
+		arr[i] = Math.floor((i/D) * 100);
+	return arr;
+}();
+	
 $(function() {
+	SOLVED = false;
 	$("#solve").on("click", function(e) {
 		e.preventDefault();
 		var game = getGame();
-//		if(isValid(game.grid))
+		if(isValid(game.grid))
 			solve(game.grid);
 	});
 	
 	$("#clear").on("click", function(e) {
 		e.preventDefault();
 		clearGrid();
+	});
+	
+	$("input[type=text]").change(function(e) {
+		if(SOLVED)
+			return;
+		//TODO: Add validation
 	});
 });
 
@@ -42,15 +58,18 @@ function solve(grid) {
 function dfs(grid, d) {//d = depth on tree
 	if(d === D) {
 		console.log("Solved...");
+		SOLVED = true;
+//		updateProgress(D);
 		printToScreen(grid);
 		return;
 	}
 	
 	if(grid[d] !== 0) {
-		dfs(grid, d+1); return;
+		dfs(grid, d+1);
+		return;
 	}
 	
-	for(var i = 1; i <= R; i++) {
+	for(var i = 1; i <= R && !SOLVED; i++) {
 		grid[d] = i;
 		if(!canBacktrack(grid, d))
 			dfs(grid, d+1);
@@ -90,16 +109,6 @@ function canBacktrack(a, k) {
 	return false;
 }
 
-function print(grid) {
-	for(var i = 0; i < R; i++) {
-		var line = "";
-		for(var j = 0; j < R; j++) {
-			line += grid[R*i + j] + " ";
-		}
-		console.log(line);
-	}
-}
-
 function printToScreen(grid) {
 	for(var i = 0; i < R; i++) {
 		for(var j = 0; j < R; j++) {
@@ -116,7 +125,7 @@ function clearGrid() {
 	}
 }
 
-//function isValid(grid) {
-//	for(let i = 0; i < R; i++)
-//		
-//}
+//TODO: Finish me
+function isValid() {
+	return true;
+}

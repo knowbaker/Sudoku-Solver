@@ -37,3 +37,12 @@ input {
 table[class^="sudoku"] {
   margin: 0 auto;
 }
+
+/*
+* TODO: See if GPU could be used for progress bar
+*/
+.use-gpu {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+}
