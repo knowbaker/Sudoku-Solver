@@ -38,6 +38,25 @@ table[class^="sudoku"] {
   margin: 0 auto;
 }
 
+.improper {
+	text-decoration: underline;
+	animation:  alertUser 2s ease-in-out 0s 1;
+}
+
+@keyframes alertUser {
+	0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 /*
 * TODO: See if GPU could be used for progress bar
 */
