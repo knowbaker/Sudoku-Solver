@@ -11,6 +11,12 @@ To run it locally, clone the project, point your favorite http server to the pro
 * Http server
 * Browser (you will get better results with a browser that supports service workers like Chrome and Firefox)
 
+### Using the solver
+
+* Once you have the Sudoku grid on your browser, you can enter numbers 1 thru 9 in the cells.
+* To solve at any time, click the solve button on the top right
+* To clear the grid and start over, click the clear button on the top right
+
 ## Contributing
 
 TODO
