@@ -17,27 +17,12 @@ var PROGRESS = function() {//TODO: Might be useless due to high CPU utilization 
 	
 $(function() {
 	SOLVED = false;
-	$("#solve").on("click", function(e) {
-		e.preventDefault();
-		var game = {};
-		try {
-			game = getGame();
-		} catch(e) {
-			$("#inst").addClass("improper");
-			console.log(e.message);
-			return;
-		}
-//		if(isValid(game))
-			solve(game.grid);
-			console.log("Done..")
-	});
 	
 	$("#clear").on("click", function(e) {
 		e.preventDefault();
 		clearInput();
 		$("#inst").removeClass("improper");
 		SOLVED = false;
-//		game = {};
 	});
 	
 	$("input[type=text]").blur(function(e) {
@@ -49,7 +34,55 @@ $(function() {
 		}
 		//TODO: Add validation
 	});
+	
+	$("#solve").on("click", e => {
+		e.preventDefault();
+		var game = loadGame();
+		if("serviceWorker" in navigator) {
+			var msgChan = new MessageChannel();
+			msgChan.port1.onmessage = e1 => {
+				if(e1.data.error)
+					console.log("ERROR...");
+				else {
+					printToScreen(e1.data);
+					$("#progBar").remove();
+				}
+			}
+			$("#prog").append("<img src='img/ajax-loader.gif' id='progBar'>");
+			navigator.serviceWorker.controller.postMessage(game.grid, [msgChan.port2]);
+		} else {//fall back to main thread if no service worker
+			$("#prog").append("<p id='progBar' style='font-size:14px;font-family:Helvetica,Arial,sans-serif'>Solving...</p>");
+			sleep(500).then(() => {//sleep to allow the progBar to display
+				solve(game.grid);
+				$("#progBar").remove();
+				console.log("Done..")
+			});
+		}
+	});
 });
+
+function print(grid) {
+	console.log("CLIENT....");
+	for(let i = 0; i < R; i++) {
+		let line = "";
+		for(let j = 0; j < R; j++) 
+			line += grid[i*R + j] + " ";
+		console.log(line);
+	}
+}
+
+function loadGame() {
+	var game = {};
+	try {
+		game = getGame();
+	} catch(e) {
+		$("#inst").removeClass("improper");
+		$("#inst").addClass("improper");
+		console.log(e.message);
+		throw e;
+	}
+	return game;
+}
 
 function getGame() {
 	var game = {};
@@ -153,6 +186,10 @@ function clearInput() {
 	for(var i = 0; i < R; i++)
 		for(var j = 0; j < R; j++)
 			$("#d" + i + j).val("");
+}
+
+function sleep(time) {
+	return new Promise(resolve => setTimeout(resolve, time));
 }
 
 //TODO: Finish me

@@ -12,13 +12,21 @@
     <title>Sudoku</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
     <script src="js/main.js"></script>
     <script src="js/sudoku.js"></script>
+    <script>
+    	if("serviceWorker" in navigator) {
+	    	navigator.serviceWorker.register("/sw.js")
+	    		.then(reg => console.log("SW registered", reg))
+	    		.catch(err => console.log("Badness", err));
+    	} else
+    		console.log("Upgrade to a more civilized browser like FF or Chrome");
+    </script>
     <!-- TODO: IE-10 and other bootstrap workarounds -->
   </head>
 
@@ -28,6 +36,7 @@
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
+          	<!-- <li role="presentation"><button class="btn btn-default" id="test">Test</button> -->
           	<li role="presentation"><button class="btn btn-default" id="clear">Clear</button></li>
             <li role="presentation"><button class="btn btn-default" id="solve">Solve</button></li>
           </ul>
@@ -39,7 +48,7 @@
         <div class="row" id="board">
         	<!-- table with class sudoku here -->
       	</div>
-      	<div class="row" id="prog"><!-- <img src="images/ajax-loader.gif"> --><!-- <progress class="use-gpu" max="100" id="progress"></progress> --></div>
+      	<div class="row" id="prog"><!-- <img src="img/ajax-loader.gif"> --><!-- <progress class="use-gpu" max="100" id="progress"></progress> --></div>
       </div>
       <p class="footer">Enter numbers (1 - 9) and click the "Solve" button for a solution. <span id="inst">Enter at least 17 numbers</span> for a <a href="http://arxiv.org/abs/1201.0749">proper Sudoku</a></p>
 
