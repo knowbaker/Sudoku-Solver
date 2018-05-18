@@ -1,1 +1,4 @@
 /bin/
+org.eclipse*
+.project
+.settings
