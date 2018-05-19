@@ -1,4 +1,4 @@
-const R = 9;//4;
+const R = 9;
 const D = R*R;
 const S = Math.sqrt(R);
 const PCT = 0.01;
@@ -10,7 +10,6 @@ self.addEventListener("install", e => {
 
 self.addEventListener("message", e => {
 	var grid = e.data;
-	console.log("SW got grid of size: " +grid.length);
 	var solvedGrid = [];
 	solve(grid, solvedGrid);
 	e.ports[0].postMessage(solvedGrid);
