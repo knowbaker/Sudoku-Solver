@@ -1,3 +1,5 @@
+'use strict';
+
 const R = 9;
 const D = R*R;
 const S = Math.sqrt(R);
@@ -9,7 +11,15 @@ self.addEventListener("install", e => {
 });
 
 self.addEventListener("message", e => {
-	var grid = e.data;
+	console.log("SW got cmd: " + e.data.cmd);
+	console.log("SW got grid of size: " + e.data.grid.length);
+	var cmd = e.data.cmd;
+	var grid = e.data.grid;
+	if(cmd === 0) {
+		// resetArray(grid)
+		var rand = getRandomBetweenInclusive(1, R);
+		grid[0] = rand;
+	}
 	var solvedGrid = [];
 	solve(grid, solvedGrid);
 	e.ports[0].postMessage(solvedGrid);
@@ -81,4 +91,14 @@ function canBacktrack(a, k) {
 function deepCopy(grid1, grid2) {
 	for(let i = 0; i < grid1.length; i++)
 		grid2[i] = grid1[i];
+}
+
+function resetArray(arr) {
+	arr.forEach(function(item, index, array) {
+		array[index] = 0;
+	});
+}
+
+function getRandomBetweenInclusive(min, max) {
+	return Math.floor(Math.random() * Math.floor(max - min + 1)) + min;
 }
