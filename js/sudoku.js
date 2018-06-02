@@ -1,6 +1,8 @@
 /*
  * References
  * Algorithms by by Robert Sedgewick and Kevin Wayne
+ * https://stackoverflow.com/questions/19697033/styling-a-sudoku-grid/19699482#19699482
+ * https://jsfiddle.net/MrPolywhirl/Lrgw7eLL/
  */
 //'use strict';
 import * as util from './util.js';
@@ -12,15 +14,33 @@ const S = Math.sqrt(R);
 const PROPER_SUDOKU_THRESHOLD = 17;
 const PCT = 0.01;
 const NUM_REGEX = /[1-9]{1}/;
+
 const ACTION = {
 	MAKE: "make",
 	SOLVE: "solve"
-}
+};
+
+var grid = [//default sample on page load
+	7, 0, 8, 0, 0, 0, 3, 0, 0,
+	0, 0, 0, 2, 0, 1, 0, 0, 0,
+	5, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 4, 0, 0, 0, 0, 0, 2, 6,
+	3, 0, 0, 0, 8, 0, 0, 0, 0,
+	0, 0, 0, 1, 0, 0, 0, 9, 0,
+	0, 9, 0, 6, 0, 0, 0, 0, 4,
+	0, 0, 0, 0, 7, 0, 5, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0
+];
+
 
 var SOLVED = false;
+var prepopulatedCells = [];
+
 
 $(function() {
 	SOLVED = false;
+
+	createInitialLayout();
 	
 	$("#clear").on("click", function(e) {
 		e.preventDefault();
@@ -40,12 +60,36 @@ $(function() {
 		//TODO: Add more validation
 	});
 	
-	$("#solve").on("click", e => work(e, ACTION.SOLVE));
+	$("#solve").on("click", e => perform(e, ACTION.SOLVE));
 
-	$("#make").on("click", e => work(e, ACTION.MAKE));
+	$("#make").on("click", e => perform(e, ACTION.MAKE));
 });
 
-function work(e, action) {
+function createInitialLayout() {
+
+	$('#board').append(createTableLayout());
+
+    grid.forEach(function(item, index, array) {
+    	if(item !== 0)
+    		prepopulatedCells[index] = true;
+    });
+    
+    util.populateGrid(grid, R, prepopulatedCells);
+}
+
+function createTableLayout() {
+	$("#board").append("<table class=sudoku>");
+	
+	for(var i = 0; i < R; i++) {
+		$("table").append("<tr id='r" + i + "'>");
+		for(var j = 0; j < R; j++)
+			$("#r"+i).append("<td id='c" + i + j + "'><input type='text' maxlength='1' id='d" + i + j + "'</input></td>");		
+	}
+	
+	$("table").addClass("sudoku");
+}
+
+function perform(e, action) {
 	e.preventDefault();
 	var game = loadGame(action);//TODO: after clear throws error of improper game
 	if("serviceWorker" in navigator) {
@@ -55,10 +99,10 @@ function work(e, action) {
 				console.log("ERROR...");
 			else {
 				if(action == ACTION.MAKE) {
-					let randomlyPopulatedIndices = util.getRandomNumbers(PROPER_SUDOKU_THRESHOLD, D);
-					util.resetArrayItems(e1.data, randomlyPopulatedIndices);
+					prepopulatedCells = util.getRandomNumbers(PROPER_SUDOKU_THRESHOLD, D);
+					util.resetArrayItems(e1.data, prepopulatedCells);
 				}
-				util.populateGrid(e1.data, R);
+				util.populateGrid(e1.data, R, prepopulatedCells);
 				$("#progBar").remove();
 			}
 		}

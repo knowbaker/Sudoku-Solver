@@ -1,11 +1,11 @@
 'use strict';
 
-export function populateGrid(grid, radix) {
+export function populateGrid(grid, radix, prepopulatedCells) {
 	for(let i = 0; i < radix; i++)
 		for(let j = 0; j < radix; j++) {
 			let cellId = "#d" + i + j;
 			clearStyle(cellId);
-			if(grid[radix * i + j] !== 0)
+			if(prepopulatedCells[radix * i + j] === true)
 				setStyle(cellId);
 			$(cellId).val(grid[radix*i + j] || '');
 		}
@@ -20,9 +20,9 @@ export function clearGrid(radix) {
 		}
 }
 
-export function resetArrayItems(arr, indexMap) {
+export function resetArrayItems(arr, prepopulatedCells) {
 	arr.forEach(function(item, index, array) {
-		if(indexMap[index] === undefined)
+		if(prepopulatedCells[index] === undefined)
 			array[index] = 0; 
 	});
 }
