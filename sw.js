@@ -11,8 +11,7 @@ self.addEventListener("install", e => {
 });
 
 self.addEventListener("message", e => {
-	console.log("SW got cmd: " + e.data.cmd);
-	console.log("SW got grid of size: " + e.data.grid.length);
+	console.log("SW got message:");
 	var cmd = e.data.cmd;
 	var grid = e.data.grid;
 	if(cmd === 0) {
@@ -29,6 +28,7 @@ function solve(grid, solvedGrid) {
 	var ref = {status: false};
 	dfs(grid, 0, ref, solvedGrid);
 	console.log(solvedGrid.length);
+	print(solvedGrid);
 }
 
 function dfs(grid, d, ref, solvedGrid) {//d = depth on tree

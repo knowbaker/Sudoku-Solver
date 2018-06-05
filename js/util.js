@@ -11,12 +11,14 @@ export function populateGrid(grid, radix, prepopulatedCells) {
 		}
 }
 
-export function clearGrid(radix) {
+export function clearGrid(grid, radix, prepopulatedCells) {
 	for(let i = 0; i < radix; i++)
 		for(let j = 0; j < radix; j++) {
 			let cellId = "#d" + i + j;
-			clearStyle(cellId);
-			$(cellId).val("");
+			if(prepopulatedCells[radix * i + j] === undefined) {
+				clearStyle(cellId);
+				$(cellId).val("");				
+			}
 		}
 }
 
