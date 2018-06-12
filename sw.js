@@ -28,7 +28,6 @@ function solve(grid, solvedGrid) {
 	var ref = {status: false};
 	dfs(grid, 0, ref, solvedGrid);
 	console.log(solvedGrid.length);
-	print(solvedGrid);
 }
 
 function dfs(grid, d, ref, solvedGrid) {//d = depth on tree
